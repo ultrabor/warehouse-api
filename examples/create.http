@@ -1,0 +1,21 @@
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "name": "Игровой монитор",
+  "description": "27 дюймов, 144Гц, IPS",
+  "price": 350.50,
+  "quantity": 10
+}
+
+###
+
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "name": "Механическая клавиатура",
+  "description": "RGB подсветка, синие свичи",
+  "price": 85.00,
+  "quantity": 25
+}

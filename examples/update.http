@@ -1,0 +1,9 @@
+PUT http://localhost:8080/products/1
+Content-Type: application/json
+
+{
+  "name": "Игровой монитор Pro",
+  "description": "Обновленная модель 165Гц",
+  "price": 399.99,
+  "quantity": 5
+}
