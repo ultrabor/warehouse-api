@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -49,16 +48,14 @@ func (h *ProductHandler) GetProduct(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		handleError(c, err)
 		return
 	}
 
 	product, err := h.useCase.GetByID(c.Request.Context(), id)
 	if err != nil {
 
-		fmt.Printf("[DEBUG] GetByID error for ID %d: %v\n", id, err)
-
-		c.JSON(http.StatusNotFound, gin.H{"error": "product not found"})
+		handleError(c, err)
 		return
 	}
 
@@ -68,7 +65,7 @@ func (h *ProductHandler) GetProduct(c *gin.Context) {
 func (h *ProductHandler) ListProducts(c *gin.Context) {
 	products, err := h.useCase.GetAll(c.Request.Context())
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 
@@ -79,14 +76,14 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		handleError(c, err)
 		return
 	}
 
 	var p domain.Product
 
 	if err := c.ShouldBindJSON(&p); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
+		handleError(c, err)
 		return
 	}
 
@@ -96,7 +93,7 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 
 	if err != nil {
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 
@@ -108,13 +105,13 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		handleError(c, err)
 		return
 	}
 
 	err = h.useCase.Delete(c.Request.Context(), id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "product not found"})
+		handleError(c, err)
 		return
 	}
 

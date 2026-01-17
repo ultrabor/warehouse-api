@@ -1,2 +1,2 @@
-DELETE http://localhost:8080/products/2
+DELETE http://localhost:8080/products/7
 Accept: application/json
