@@ -40,7 +40,6 @@ func (uc *ProductUseCase) Update(ctx context.Context, p *domain.Product) error {
 	}
 
 	_, err := uc.repo.GetByID(ctx, p.ID)
-
 	if err != nil {
 		return err
 	}

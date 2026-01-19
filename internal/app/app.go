@@ -27,6 +27,12 @@ func RunApp() {
 	}
 	defer db.Close()
 
+	err = db.Ping()
+
+	if err != nil {
+		logger.Error("failed to ping DB", "error", err)
+	}
+
 	logger.Info("Connected to Database")
 
 	if err := config.RunMigrations(cfg.DBURL); err != nil {

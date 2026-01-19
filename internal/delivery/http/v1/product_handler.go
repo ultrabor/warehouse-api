@@ -29,18 +29,17 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	var p domain.Product
 
 	if err := c.ShouldBindJSON(&p); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
+		handleError(c, err)
 		return
 	}
 
 	id, err := h.useCase.Create(c.Request.Context(), &p)
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{"id": id})
+	c.JSON(http.StatusCreated, gin.H{"id": id})
 
 }
 
@@ -54,7 +53,6 @@ func (h *ProductHandler) GetProduct(c *gin.Context) {
 
 	product, err := h.useCase.GetByID(c.Request.Context(), id)
 	if err != nil {
-
 		handleError(c, err)
 		return
 	}
@@ -81,7 +79,6 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	}
 
 	var p domain.Product
-
 	if err := c.ShouldBindJSON(&p); err != nil {
 		handleError(c, err)
 		return
@@ -90,15 +87,12 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	p.ID = id
 
 	err = h.useCase.Update(c.Request.Context(), &p)
-
 	if err != nil {
-
 		handleError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{"id": p.ID})
-
+	c.JSON(http.StatusOK, gin.H{"id": p.ID})
 }
 
 func (h *ProductHandler) DeleteProduct(c *gin.Context) {

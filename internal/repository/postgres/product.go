@@ -24,7 +24,6 @@ func (pr *ProductRepository) Create(ctx context.Context, p *domain.Product) (int
 	var id int64
 
 	err := pr.db.QueryRowContext(ctx, query, p.Name, p.Description, p.Price, p.Quantity).Scan(&id)
-
 	if err != nil {
 		return 0, fmt.Errorf("repository creating error: %w", err)
 	}
@@ -37,7 +36,6 @@ func (pr *ProductRepository) GetByID(ctx context.Context, id int64) (*domain.Pro
 
 	var product domain.Product
 	err := pr.db.GetContext(ctx, &product, query, id)
-
 	if err != nil {
 		return nil, err
 	}
@@ -48,13 +46,11 @@ func (pr ProductRepository) Update(ctx context.Context, p *domain.Product) error
 	query := `update products set name = $1, description = $2, price = $3, quantity = $4 where id = $5`
 
 	res, err := pr.db.ExecContext(ctx, query, p.Name, p.Description, p.Price, p.Quantity, p.ID)
-
 	if err != nil {
 		return fmt.Errorf("repository update err: %w", err)
 	}
 
 	rows, _ := res.RowsAffected()
-
 	if rows == 0 {
 		return fmt.Errorf("no product was found to update")
 	}
@@ -66,7 +62,6 @@ func (pr ProductRepository) Delete(ctx context.Context, id int64) error {
 	query := `delete from products where id = $1`
 
 	_, err := pr.db.ExecContext(ctx, query, id)
-
 	if err != nil {
 		return fmt.Errorf("repository delete error: %w", err)
 	}
@@ -80,7 +75,6 @@ func (pr ProductRepository) GetAll(ctx context.Context) ([]domain.Product, error
 	var products []domain.Product
 
 	err := pr.db.SelectContext(ctx, &products, query)
-
 	if err != nil {
 		return nil, fmt.Errorf("repository get all err: %w", err)
 	}
